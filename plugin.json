@@ -1,0 +1,17 @@
+{
+	"pluginName": "文本共享",
+	"description": "多设备（多人）间文本共享",
+	"homepage": "https://github.com/vst93",
+	"author": "vst",
+	"main": "index.html",
+	"logo": "logo.png",
+	"version": "0.0.1",
+	"preload":"preload.js",
+	"features": [
+	    {
+			"code": "v-connection",
+			"explain": "文本共享",
+	        "cmds":["文本共享","text share","v connection"]
+		}
+	]
+}

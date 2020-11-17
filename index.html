@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
+    <title>v-connection</title>
+    <link href="assets/index.css" type="text/css" rel="stylesheet" />
+    <script src="assets/jquery.min.js"></script>
+    <script src="assets/index.js"></script>
+    <script src="assets/clipboard.min.js"></script>
+</head>
+
+<body>
+    <div class="title">
+        v-connection
+        <img src="assets/qrcode.svg" rel="QR" class="share"></img>
+        <img src="assets/browser.svg" rel="open in browser" class="open-browser"></img>
+        <div class="div-checkbox">
+            <i>隐蔽模式</i>
+            <input type="checkbox" id="mds">
+            <label for="mds"></label>
+        </div>
+        <div class="div-share-qr">
+            <img src="" rel="" class="share-qr"></img>
+        </div>
+    </div>
+    <div class="board">
+        <div class="scrollbar"></div>
+    </div>
+    <textarea class="text"></textarea>
+    <div class="send">发 送 (ctrl+回车)</div>
+    <div class="div-pop-notice">
+        <div class="pop-notice"></div>
+    </div>
+    <script>
+        var key = ""
+        var t = 0
+        var sendBtnStatus = 1
+        // var host = 'http://127.0.0.1'
+        var host = 'http://meimingzi.top'
+        $(".send").click(function () {
+            if (sendBtnStatus == 0) {
+                return;
+            } else {
+                setTimeout(function () {
+                    sendBtnStatus = 1
+                }, 1000);
+            }
+            sendBtnStatus = 0
+            var text = $(".text").val()
+            if (key == "" || text == "") {
+                return
+            }
+
+            text = $(".text").val()
+
+            var mode = ""
+            if ($('#mds').prop('checked')) {
+                mode = "ip"
+            }
+
+            $.post(host + "/vc/add",
+                {
+                    key: key,
+                    text: text,
+                    mode: mode
+                },
+                function (data, status) {
+                    $(".text").val("")
+                    refreshBoard(true)
+                }
+            );
+        });
+
+        function refreshBoard(scroll) {
+            if (key == "") {
+                return
+            }
+            var mode = ""
+            if ($('#mds').prop('checked')) {
+                mode = "ip"
+            }
+
+            $.get(host + "/vc/get?key=" + key + "&t=" + t + "&mode=" + mode,
+                function (data, status) {
+                    retData = data.data
+                    if (retData != null && retData.length > 0) {
+                        retData.forEach(function (value, index) {
+                            t = value.ts
+                            $(".board").append("<li data-clipboard-text='" + value.text + "'>" + value.text + "</li>")
+                        })
+                        var scrollHeight = $('.board').prop("scrollHeight");
+                        var scrollTop = $(".board").scrollTop() + $(".board").height()
+                        var boardHeight = $(".board").height()
+                        if (scroll == true || (scrollHeight - scrollTop) < boardHeight) {
+                            $('.board').animate({ scrollTop: scrollHeight }, 400);
+                        }
+                    }
+                }
+            );
+
+        }
+
+        setInterval(refreshBoard, 3000);
+        $(function () {
+            // url = window.location.href
+            // qrUrl = "https://api.pwmqr.com/qrcode/create/?url=" + encodeURI(url)
+            // $(".share-qr").attr("src", qrUrl)
+            $(".share").mouseover(function () {
+                $(".div-share-qr").show()
+            })
+            $(".share").mouseout(function () {
+                $(".div-share-qr").hide()
+            })
+            urlS = ""
+            if (urlS.length > 0) {
+                key = urlS
+            } else {
+                key = randomStr(32)
+                // location.href = changeURLArg(url, 's', key)
+            }
+
+            var url = "http://meimingzi.top/w/?s="+key
+            qrUrl = "https://api.pwmqr.com/qrcode/create/?url=" + encodeURI(url)
+            $(".share-qr").attr("src", qrUrl)
+
+            var stat = false;
+            $(".text").keydown(function (e) {
+                var curKey = e.which;
+                if (curKey == 13 && (stat || e.ctrlKey)) {
+                    $(".send").click();
+                    return false;
+                }
+                if (curKey == 17) {
+                    stat = true;
+                    //取消等待
+                    setTimeout(function () {
+                        stat = false;
+                    }, 300);
+                }
+            });
+
+            $(".div-checkbox").click(function () {
+                $("input#mds").prop("checked", !$("input#mds").prop('checked'));
+            })
+
+            $("input#mds").change(function () {
+                $(".board").html("")
+            })
+
+            $(".open-browser").click(function(){
+                utools.shellOpenExternal(url)
+            })
+
+        })
+        var clipboard = new ClipboardJS('.board li', {
+            text: function (trigger) {
+                return $(trigger).text()
+            }
+        });
+        clipboard.on('success', function (e) {
+            popNotice("已复制至剪切板")
+            e.clearSelection();
+        });
+
+    </script>
+    <script>
+        var _hmt = _hmt || [];
+        (function () {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?38fa8be96db099f274b828f0dd5c3444";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+</body>
+
+</html>
