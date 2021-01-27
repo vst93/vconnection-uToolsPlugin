@@ -8,7 +8,7 @@ sortSta = 'asc'
 filtStatus = 0
 
 utools.onPluginEnter(({ code, type, payload }) => {
-    utools.setExpendHeight(650)
+    utools.setExpendHeight(560)
     if (code == 'v-connection') {
         
     }

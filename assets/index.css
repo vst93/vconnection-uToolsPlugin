@@ -13,13 +13,12 @@ body{
     font-size: 3vh;
     background: #03A9F4;
     color: #ffffff;
+    margin-bottom: 0px;
+    box-shadow: 0 0 5px #313131;
+    position: absolute;
+    width: calc(100vw - 60px);
 }
-.board{
-    height: 61vh;
-    background: #fff;
-    overflow: scroll;
-    overflow-x: hidden;
-}
+
 .board li{
     background: #bdeaff;
     padding: 14px 12px;
@@ -37,33 +36,6 @@ body{
     border-color: #ff5722;
 }
 
-.text{
-    height: 23vh;
-    background: #e8e8e8;
-    width: 99%;
-    border: 0;
-    padding: 0.5%;
-    margin: 0;
-    resize: none;
-    border-bottom: 1px dotted #03A9F4;
-    border-bottom-right-radius: 0;
-    border-bottom-left-radius: 0;
-}
-.send{
-    height: 6vh;
-    background: #FF5722;
-    width: 90%;
-    border: 0;
-    text-align: center;
-    margin: 0 auto;
-    line-height: 6vh;
-    font-size: 3vh;
-    color: #ffffff;
-    padding: 0;
-    border-radius: 2vh;
-    max-width: 500px;
-    cursor: pointer;
-}
 .send:hover{
     background: #03A9F4;
 }
@@ -114,7 +86,7 @@ body{
 }
 .board::-webkit-scrollbar {
     /*滚动条整体样式*/
-    width : 8px;  /*高宽分别对应横竖滚动条的尺寸*/
+    width : 6px;  /*高宽分别对应横竖滚动条的尺寸*/
     height: 1px;
 }
 .board::-webkit-scrollbar-thumb {
@@ -219,4 +191,102 @@ input[type="checkbox"] + label:after {
     cursor: pointer;
     margin-top: 0.5vh;
     margin-right: 2vw;
+}
+
+
+/*横屏*/
+@media all and (orientation :landscape){
+    .send-form{
+        border: 0;
+        margin: 0;
+        padding: 0;
+        width: 35vw;
+        height: 95vh;
+        background: #fff;
+        /* border-left: 1px #969696 solid; */
+        float: right;
+        margin-top: 7vh;
+    }
+    .text{
+        height: calc(86vh - 16px);
+        background: #e8e8e8;
+        width: calc(100% - 16px);
+        border: 0;
+        padding: 8px;
+        margin: 0;
+        resize: none;
+        border-bottom: 1px dotted #03A9F4;
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+    .send{
+        height: calc(7vh - 3px);
+        background: #FF5722;
+        width: calc(100% - 2px);
+        border: 0;
+        text-align: center;
+        margin: 0 auto;
+        line-height: 7vh;
+        font-size: 3vh;
+        color: #ffffff;
+        padding: 0;
+        cursor: pointer;
+        margin-top: -4px;
+        border: 1px solid #3c3939;
+    }
+    .board{
+        float: left;
+        height: 93vh;
+        background: #fff;
+        overflow: scroll;
+        overflow-x: hidden;
+        width: 65vw;
+        padding-top: 7vh;
+    }
+}
+
+
+/*竖屏*/
+@media all and (orientation :portrait){
+    .send-form{
+        border: 0;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    .text{
+        height: calc(24vh - 12px);
+        background: #e8e8e8;
+        width: calc(100vw - 12px);
+        border: 0;
+        padding: 6px;
+        margin: 0;
+        resize: none;
+        border-bottom: 1px dotted #03A9F4;
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+    .send{
+        height: 6vh;
+        background: #FF5722;
+        width: 90%;
+        border: 0;
+        text-align: center;
+        margin: 0 auto;
+        line-height: 6vh;
+        font-size: 3vh;
+        color: #ffffff;
+        padding: 0;
+        border-radius: 2vh;
+        max-width: 500px;
+        cursor: pointer;
+    }
+    .board{
+        height: 61vh;
+        background: #fff;
+        overflow: scroll;
+        overflow-x: hidden;
+        padding-top: 7vh;
+    }
 }
